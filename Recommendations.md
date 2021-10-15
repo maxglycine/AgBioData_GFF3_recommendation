@@ -41,12 +41,12 @@ The [GFF3](https://github.com/The-Sequence-Ontology/Specifications/blob/master/g
 
 The [AgBioData consortium](https://www.agbiodata.org/) is a group of genomics, genetics and breeding databases and partners working towards shared practices and standards. Almost every AgBioData database uses the GFF3 format in some capacity, either for content ingest (into the database or associated tools, such as JBrowse), analysis, distribution, or all of the above. Many AgBioData members report that much of their data wrangling time is spent reformatting and correcting GFF3 files that model the same data types in different ways. Providing concrete guidelines for generating GFF3, and creating a standard representation of the most common biological data types in GFF3 that would be compatible with the most commonly used tools, would provide a major increase in efficiency for all AgBioData databases.
 
-The AgBioData GFF3 working group has developed new recommendations to solve common problems in the GFF3 format. We have referred to and in some cases adopted guidelines developed by the Alliance of Genome Resources ([https://docs.google.com/document/d/1yjQ7lozyETeoGkPfSMTAT8IN3ZIAuy5YkbsBdjGeLww/edit#heading=h.vz8hm961nr5b](https://docs.google.com/document/d/1yjQ7lozyETeoGkPfSMTAT8IN3ZIAuy5YkbsBdjGeLww/edit#heading=h.vz8hm961nr5b)), and NCBI ([https://www.ncbi.nlm.nih.gov/sites/genbank/genomes\_gff/](https://www.ncbi.nlm.nih.gov/sites/genbank/genomes_gff/) and [https://www.ncbi.nlm.nih.gov/datasets/docs/about-ncbi-gff3/](https://www.ncbi.nlm.nih.gov/datasets/docs/about-ncbi-gff3/)). Below, we suggest improvements for each of the GFF3 fields, as well as the special cases of modeling functional annotations, and standard protein-coding genes. We welcome debate and discussion of these recommendations from the larger community - these recommendations will only be helpful if they are refined and then adopted by many. Our goal is to clarify the GFF3 specification and limit ambiguity for AgBioData and other databases and resources.
+The AgBioData GFF3 working group has developed new recommendations to solve common problems in the GFF3 format. We have referred to and in some cases adopted guidelines developed by the [Alliance of Genome Resources](https://docs.google.com/document/d/1yjQ7lozyETeoGkPfSMTAT8IN3ZIAuy5YkbsBdjGeLww/edit#heading=h.vz8hm961nr5b), and [NCBI](https://www.ncbi.nlm.nih.gov/sites/genbank/genomes\_gff/) and the [NCBI GFF3 standard](https://www.ncbi.nlm.nih.gov/datasets/docs/about-ncbi-gff3/). Below, we suggest improvements for each of the GFF3 fields, as well as the special cases of modeling functional annotations, and standard protein-coding genes. We welcome debate and discussion of these recommendations from the larger community - these recommendations will only be helpful if they are refined and then adopted by many. Our goal is to clarify the GFF3 specification and limit ambiguity for AgBioData and other databases and resources.
 
 Specific recommendations
 ========================
 
-We recommend that developers and databases follow the Sequence Ontology specifications ([https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md](https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md)) with emphases and additions below. Each field contains information in the following categories:
+We recommend that developers and databases follow the [Sequence Ontology specifications](https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md) with emphases and additions below. Each field contains information in the following categories:
 
 - Change level: The level of change relative to the SO specification. Values are &#39;No change&#39;, &#39;Recommendation only&#39;,&#39;minor&#39;, &#39;moderate&#39;, &#39;major&#39;
 - Summary: A summary of the GFF3 working group&#39;s findings.
@@ -68,7 +68,7 @@ Seqid
   - **Validation**
     - A pragma line in the GFF3 header should provide a resolvable URL to the GenBank Alias table. Validator should only verify that the link is active.
     - If the GenBank Alias table is not available, then a separate alias table can be provided, where all identifiers in column 1 of the GFF3 file must be uniquely present in column 1 of the alias table. The columns in the alias file should be tab delimited and all lines beginning with a hash (#) will be ignored. There will be NO validation for an alternate alias table.
-  - **Example** [https://docs.google.com/document/d/180g1rfC5n\_cR6sioG\_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.tr1vioe7doqb](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.tr1vioe7doqb)
+  - **Example** [Alias Table Example](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.tr1vioe7doqb)
 
 
 Source
@@ -86,7 +86,7 @@ Source
     - If there are multiple sources, use a literal comma to separate them (NOT `%2C`). Source names should not include literal commas.
     - Specify the tool, method or pipeline used to generate this annotation or the database it was acquired from. Mention the version number if available.
     - The feature should be a well defined output of the tool or database specified. If there is any ambiguity or post-processing, it should be clearly explained in the pragma stanza at the top of the GFF file. See the [pragma](#pragmas) section below.
-  - **Example** [https://docs.google.com/document/d/180g1rfC5n\_cR6sioG\_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.8yzwr29w95mh](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.8yzwr29w95mh)
+  - **Example** [Source Example](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.8yzwr29w95mh)
 
 
 Type
@@ -96,12 +96,12 @@ Type
   - **Summary**: We endorse the Alliance recommendations for the `type` field when modeling hierarchical gene features. This aligns with the SO specification that expects this to be "either a term from the Sequence Ontology or an SO accession number."
   - **Proposed changes to specification**: none
   - **Rationale**: Software interpreting the type column can run into difficulties with complex cases. Software is easier to develop and maintain if we can make some simplifying assumptions about how genes are typically modeled. Using simple terms will additionally improve human readability and interpretation.
-  - **Best practice**: Top-level feature types can include `gene` and `pseudogene`. Optionally, include a `so_term_name` attribute in column 9 to specify the child (type) of `gene` - e.g. `protein_coding_gene`, `ncRNA_gene`, `miRNA_gene` and `snoRNA_gene` ([http://purl.obolibrary.org/obo/SO\_0000704](http://purl.obolibrary.org/obo/SO_0000704)). Transcript features should include the appropriate SO term in column 3 (e.g. `mRNA`, `snoRNA`, etc).
+  - **Best practice**: Top-level feature types can include `gene` and `pseudogene`. Optionally, include a `so_term_name` attribute in column 9 to specify the child (type) of `gene` - e.g. [`protein_coding_gene`, `ncRNA_gene`, `miRNA_gene` and `snoRNA_gene`](http://purl.obolibrary.org/obo/SO\_0000704). Transcript features should include the appropriate SO term in column 3 (e.g. `mRNA`, `snoRNA`, etc).
   - **Validation**
     - Must be a valid SO term or SO accession number
     - All child rows should use a type within the hierarchy of the parent
-    - A list of the SO terms and the hierarchy in OBO format is fetched from [http://song.cvs.sourceforge.net/viewvc/\*checkout\*/song/ontology/sofa.obo](http://song.cvs.sourceforge.net/viewvc/*checkout*/song/ontology/sofa.obo) by default
-  - **Example** [https://docs.google.com/document/d/180g1rfC5n\_cR6sioG\_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.t94q0hgki4w9](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.t94q0hgki4w9)
+    - A list of the SO terms and the hierarchy in OBO format is fetched from the [SOFA ontology](http://song.cvs.sourceforge.net/viewvc/\*checkout\*/song/ontology/sofa.obo) by default
+  - **Example** [Type Example](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.t94q0hgki4w9)
 
 
 Start, End
@@ -119,7 +119,7 @@ Start, End
     - A feature that is one base in length, e.g., a SNP, is also indicated by start = end. Distinguishing between one-base and zero-length features will have to rely on other fields, such as the type field.
     - In the absence of the _&#39;Is\_circular=true_&#39; attribute in column 9, _end_ indicates the terminal coordinate of the feature.
     - If _&#39;Is\_circular=true_&#39; appears in column 9, _start_ gives the beginning coordinate of the feature and _end_ is start + (feature length - 1). This means the value for _end_ may be larger than the chromosome size
-  - _ **Examples** _: [https://docs.google.com/document/d/180g1rfC5n\_cR6sioG\_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.15ngz7f2sit7](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.15ngz7f2sit7)
+  - _ **Examples**  [Position Example](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.15ngz7f2sit7)
 
 
 Score
@@ -137,7 +137,7 @@ Score
       1. It must be a floating point number
       2. There must be a #!score pragma in the following format:
       3. #!score score-name program program-version score-range decreases|increases
-  7. _ **Example** _: [https://docs.google.com/document/d/180g1rfC5n\_cR6sioG\_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.wsrdofcyxnmu](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.wsrdofcyxnmu)
+  7. _ **Example**  [Score Example](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.wsrdofcyxnmu)
 
 
 Strand
@@ -159,15 +159,15 @@ Phase
   - _ **Summary** _: Programs generating and consuming gff3 should pay close attention to the phase field and validate it, as phase is often incorrect.
   - _ **Proposed changes to specification:** _ none
   - _ **Rationale** _: We have identified three main problems with the phase field. 1) Phase is often ignored or misinterpreted, both by programs generating gff3 and programs that consume it. When recorded manually, phase is often incorrect. This is problematic for programs that calculate the CDS and protein sequence using the combination of CDS coordinates and phase. Other methods that are frequently used to calculate the CDS and protein sequence (e.g. longest ORF, identifying start and stop codons) make critical assumptions that can also generate incorrect sequence, in particular for fragmented genomes where gene models may not have start and/or stop codons. 2) Even if the phase is correct, a translation table is required to correctly calculate the protein sequence, and there may be multiple translation tables needed for a given gff3, for example when both nuclear and organellar sequence is represented. 3) Even when the phase and translation tables are correct, the correct sequence may not be inferred due to post-translational modifications (e.g. selenocysteines) or problematic reference genome assemblies. NCBI represents these edge cases via the &#39;transl\_except&#39; attribute.
-  - _ **Best practices** _: We recommend that programs generating and consuming gff3 pay close attention to this value and validate it; however, validation may still fail in complex cases. Phase may be an example where the GFF3 format has reached its limit. In cases where the correct sequence may not be inferred due to post-translational modifications (e.g. selenocysteines) or problematic reference genome assemblies, use the &#39;transl\_except&#39; convention developed by NCBI on the CDS feature (transl\_except=(pos:\&lt;base\_range\&gt;%2Caa:\&lt;amino\_acid\&gt;); [https://www.ncbi.nlm.nih.gov/genbank/genomes\_gff/](https://www.ncbi.nlm.nih.gov/genbank/genomes_gff/))
-  - _ **Validation** _: For a description of what phase means in the context of a single CDS line, see the &#39;Column 8: &quot;phase&#39; section of the current [GFF3 specification.](https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md) Optionally provide the translation table id, and the reference sequences in the GFF3 that will use that translation table id, in a phase pragma. The validator will use the translation tables in [https://www.ncbi.nlm.nih.gov/IEB/ToolBox/C\_DOC/lxr/source/data/gc.prt](https://www.ncbi.nlm.nih.gov/IEB/ToolBox/C_DOC/lxr/source/data/gc.prt). If no phase pragma is given, or if not all reference sequences are specified in the phase pragma, the validator will use the Standard genetic code (id 1). Protein and CDS fasta are optional but highly recommended. Validator will generate CDS/protein sequences based on the phase specified in the gff3 file.
+  - _ **Best practices** _: We recommend that programs generating and consuming gff3 pay close attention to this value and validate it; however, validation may still fail in complex cases. Phase may be an example where the GFF3 format has reached its limit. In cases where the correct sequence may not be inferred due to post-translational modifications (e.g. selenocysteines) or problematic reference genome assemblies, use the &#39;transl\_except&#39; [convention developed by NCBI](https://www.ncbi.nlm.nih.gov/genbank/genomes_gff/) on the CDS feature (transl\_except=(pos:\&lt;base\_range\&gt;%2Caa:\&lt;amino\_acid\&gt;); 
+  - _ **Validation** _: For a description of what phase means in the context of a single CDS line, see the &#39;Column 8: &quot;phase&#39; section of the current [GFF3 specification.](https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md) Optionally provide the translation table id, and the reference sequences in the GFF3 that will use that translation table id, in a phase pragma. The validator will use the translation tables described in the [NCBI C Toolkit Cross Reference](https://www.ncbi.nlm.nih.gov/IEB/ToolBox/C_DOC/lxr/source/data/gc.prt). If no phase pragma is given, or if not all reference sequences are specified in the phase pragma, the validator will use the Standard genetic code (id 1). Protein and CDS fasta are optional but highly recommended. Validator will generate CDS/protein sequences based on the phase specified in the gff3 file.
     - If no CDS/protein fasta is available:
       - Check for internal stops in the protein sequence - validation fails if stops are present
     - If CDS and protein fasta are available:
       - Compare given sequence to sequence generated from gff3 - validation fails if sequences are not identical
   - _ **Example** _:
-    - Pragma specifying translation table: specify exemptions to standard code only [https://www.ncbi.nlm.nih.gov/IEB/ToolBox/C\_DOC/lxr/source/data/gc.prt#0150](https://www.ncbi.nlm.nih.gov/IEB/ToolBox/C_DOC/lxr/source/data/gc.prt#0150)
-    - Example of incorrect vs. correct phase: [https://docs.google.com/document/d/180g1rfC5n\_cR6sioG\_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.d9hxh9okm6rg](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.d9hxh9okm6rg)
+    - Pragma specifying translation table: specify [exemptions to standard code only](https://www.ncbi.nlm.nih.gov/IEB/ToolBox/C_DOC/lxr/source/data/gc.prt#0150)
+    - Example of [incorrect vs. correct phase:](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.d9hxh9okm6rg)
 
 
 Attributes : ID
@@ -176,10 +176,10 @@ Attributes : ID
   - **Change level:** recommendation only
   - **Summary.** The ID attribute&#39;s role is to specify relationships between parent and child features within the GFF3. However, it is often - but not always - also used to specify a globally unique, persistent identifier. This second interpretation causes many problems with downstream software and validators. We recommend NOT using the ID attribute to specify the globally unique, persistent identifier, but instead using a separate attribute, such as Dbxref or gene\_id.
   - **Proposed changes to specification:** Recommend additional attributes (reserved or non-reserved) to specify the globally unique, persistent identifier
-  - **Rationale.** The GFF3 specification requires an ID attribute to define parent-child (part of) relationships for hierarchically modeled features (see specification for a detailed definition). In practice, the ID attribute is often also used to stand in for a globally unique, persistent identifier (in particular for genes, transcripts and proteins; see this article for definitions of and best practices on persistent identifiers: [https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.2001414](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.2001414)). This second interpretation becomes problematic when users or software assume it is true in all cases, as they expect additional meaning beyond a generic, unique string. While a dual-use ID attribute may seem convenient, it is not always clear which level of a gene feature may have the &#39;true&#39; persistent identifier - the gene, transcript, protein, even exon? In addition, it is not always possible to accurately model parent-child relationships if it is also a globally unique, persistent identifier.
-  - **Best practices.** Use the ID attribute as originally intended by the GFF3 specification, and do not assume that it contains a globally unique persistent identifier. For these, use an additional attribute. The attribute may depend on the use case - for example, if the persistent identifier is maintained by another database, Dbxref may be used (however, it may be confusing if multiple Dbxref identifiers are specified). The Alliance for Genome Resources uses the unreserved attributes gene\_id, transcript\_id, and protein\_id, where the values of these are curies ([https://en.wikipedia.org/wiki/CURIE](https://en.wikipedia.org/wiki/CURIE)). NCBI&#39;s RefSeq uses the unreserved attributes gene, transcript\_id, and protein\_id. We recommend using either of these conventions, with an additional &#39;feature\_id&#39; attribute for features that are neither genes, transcripts, or proteins. While this recommendation may require software and databases to adjust, this is simpler than forging a way for the ID attribute to meet all downstream tools&#39; and users&#39; needs. Note the still unresolved yet related problem of the corresponding FASTA definition line - there are no guidelines in terms of correspondence between the FASTA defline and identifying information in the GFF3 file.
+  - **Rationale.** The GFF3 specification requires an ID attribute to define parent-child (part of) relationships for hierarchically modeled features (see specification for a detailed definition). In practice, the ID attribute is often also used to stand in for a globally unique, persistent identifier (in particular for genes, transcripts and proteins; see this article for [definitions of and best practices on persistent identifiers:](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.2001414)). This second interpretation becomes problematic when users or software assume it is true in all cases, as they expect additional meaning beyond a generic, unique string. While a dual-use ID attribute may seem convenient, it is not always clear which level of a gene feature may have the &#39;true&#39; persistent identifier - the gene, transcript, protein, even exon? In addition, it is not always possible to accurately model parent-child relationships if it is also a globally unique, persistent identifier.
+  - **Best practices.** Use the ID attribute as originally intended by the GFF3 specification, and do not assume that it contains a globally unique persistent identifier. For these, use an additional attribute. The attribute may depend on the use case - for example, if the persistent identifier is maintained by another database, Dbxref may be used (however, it may be confusing if multiple Dbxref identifiers are specified). The Alliance for Genome Resources uses the unreserved attributes gene\_id, transcript\_id, and protein\_id, where the values of these are [curies](https://en.wikipedia.org/wiki/CURIE)). NCBI&#39;s RefSeq uses the unreserved attributes gene, transcript\_id, and protein\_id. We recommend using either of these conventions, with an additional &#39;feature\_id&#39; attribute for features that are neither genes, transcripts, or proteins. While this recommendation may require software and databases to adjust, this is simpler than forging a way for the ID attribute to meet all downstream tools&#39; and users&#39; needs. Note the still unresolved yet related problem of the corresponding FASTA definition line - there are no guidelines in terms of correspondence between the FASTA defline and identifying information in the GFF3 file.
   - **Validation.** ID attribute: only validate whether IDs for each feature are unique within the scope of the GFF file, with the exception of discontinuous features. Persistent identifiers specified via the Dbxref attribute can be validated according to Dbxref rules.
-  - **Example**. [https://docs.google.com/document/d/180g1rfC5n\_cR6sioG\_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.ajk6obcear0c](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.ajk6obcear0c)
+  - **Example**. [ID Attribute Example](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.ajk6obcear0c)
 
 
 Attributes : Name
@@ -194,7 +194,7 @@ Attributes : Name
     - Name should not be mistaken for a unique identifier, or dbxref
     - Note that different, non-reserved attributes are sometimes used instead of Name. For example, NCBI uses product for the protein product name, gene\_desc for the full gene name, and symbol as the gene abbreviation.
   - **Validation:** refer to different community standards. No automated validation currently possible.
-  - **Example:** [https://docs.google.com/document/d/180g1rfC5n\_cR6sioG\_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.or36qtilfraa](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.or36qtilfraa)
+  - **Example:** [Name Attribute Example](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.or36qtilfraa)
 
 
 ## attributes (col 9): Alias
@@ -205,7 +205,7 @@ Attributes : Name
   - **Proposed changes to specification** : None
   - **Best practices:** Use Alias for human consumption of alternate or historical names and identifiers (e.g., gene merge), but do not assume that this field will be consumed programmatically. Alias should not be a replacement for Dbxref, and valid CURIE in Dbxref should be housed within Dbxref and not in Alias. Commas, tabs, and pipes should be avoided in alias names. It is possible to have multiple Alias values. It is recommended that these be separated via a comma.
   - **Validation:** Any set of symbols would be appropriate and does not need to be unique. Alias values can not include a semicolon.
-  - **Example** : [https://docs.google.com/document/d/180g1rfC5n\_cR6sioG\_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.qub8uu7yavbh](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.qub8uu7yavbh)
+  - **Example** : [Alias Attribute Example](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.qub8uu7yavbh)
 
 
 Attributes : Dbxref
@@ -214,8 +214,8 @@ Attributes : Dbxref
   - **Change level:** Recommendation only
   - **Summary:** 1) Use the Dbxref field to cross-reference the _same_ entity at a database - the field is sometimes mis-interpreted to reference related information, but not the same entity. 2) The Dbxref should result in a resolvable URL.
   - **Proposed changes to specification:** Recommend use of the field for global entity references and crosslinks between databases.
-  - **Rationale:** The database cross-reference (dbxref) links a particular feature in the GFF record to a specific external database record by identity, source, association, or ontology links. To date, there are four established lists with hundreds of registered databases that offer external links by dbxref. The GO consortium list is maintained on GitHub with defined schema and format validation tools. It currently lists 266 databases ([http://amigo.geneontology.org/xrefs](http://amigo.geneontology.org/xrefs)). The UniProt Knowledgebase cross-reference list contains 183 databases ([https://www.uniprot.org/docs/dbxref](https://www.uniprot.org/docs/dbxref)) flagged to represent 18 categories of databases ([https://www.uniprot.org/database/](https://www.uniprot.org/database/)) for better utility. The NCBI-GenBank db\_xrefs list was developed in 1997 ([https://doi.org/10.1038/ng0497-339](https://doi.org/10.1038/ng0497-339)), however it has only 129 databases listed to date ([https://www.ncbi.nlm.nih.gov/genbank/collab/db\_xref/](https://www.ncbi.nlm.nih.gov/genbank/collab/db_xref/)). In addition, identifiers.org ([https://identifiers.org/](https://identifiers.org/)) provides a free service for looking up and referencing a data ID to one of the 714 pre-curated life science database locations using Compact Identifiers syntax. For example, the uniform resource identifier (URI) [http://identifiers.org/pdb/2gc4](http://identifiers.org/pdb/2gc4) can be instantly forwarded to [https://www.rcsb.org/structure/2gc4](https://www.rcsb.org/structure/2gc4). The syntax of Compact Identifiers includes three parts: a provider code, a namespace prefix, and an accession. The provider code and namespace prefix are manually curated and stable, and can be easily looked up at its web site. Note that the databases represented by these four resources may overlap.
-  - **Best practices:** The dbxref must refer to the same entity (not related information) in an external database. The format of a dbxref record may take the form &quot;dbxref=database:identifier&quot;, where &quot;database&quot; is an abbreviated database name registered on a known dbxref list (above), affixed without space with a specific path leading to the database agent that accepts the &quot;identifier&quot; for information retrieval. The &quot;database:identifier&quot; construct is called unique resource identifier (URI). The URI must be specific to a record. Both dbxref record and the resolved URL should be a continuous string compliant to RFC-3986 [https://datatracker.ietf.org/doc/rfc3986/]. The composed URL must be unique and exist. Multiple dbxref items may be allowed for one GFF record. When the &quot;database&quot; abbreviation + path exists in a non-publicly available dbxref resource, it must be specified in a README file attached to the GFF file. We recommend using identifiers.org for identifier resolution.
+  - **Rationale:** The database cross-reference (dbxref) links a particular feature in the GFF record to a specific external database record by identity, source, association, or ontology links. To date, there are four established lists with hundreds of registered databases that offer external links by dbxref. The GO consortium list is maintained on GitHub with defined schema and format validation tools. It currently lists [266 databases]((http://amigo.geneontology.org/xrefs). The UniProt Knowledgebase cross-reference list contains [183 databases](https://www.uniprot.org/docs/dbxref)) flagged to represent [18 categories of databases](https://www.uniprot.org/database/)) for better utility. The [NCBI-GenBank db\_xrefs list](https://doi.org/10.1038/ng0497-339) was developed in 1997 , however it has only [129 databases listed to date](https://www.ncbi.nlm.nih.gov/genbank/collab/db_xref/). In addition, [identifiers.org](https://identifiers.org/) provides a free service for looking up and referencing a data ID to one of the 714 pre-curated life science database locations using Compact Identifiers syntax. For example, the [uniform resource identifier (URI)](http://identifiers.org/pdb/2gc4) can be instantly forwarded to the record at [PDB](https://www.rcsb.org/structure/2gc4). The syntax of Compact Identifiers includes three parts: a provider code, a namespace prefix, and an accession. The provider code and namespace prefix are manually curated and stable, and can be easily looked up at its web site. Note that the databases represented by these four resources may overlap.
+  - **Best practices:** The dbxref must refer to the same entity (not related information) in an external database. The format of a dbxref record may take the form &quot;dbxref=database:identifier&quot;, where &quot;database&quot; is an abbreviated database name registered on a known dbxref list (above), affixed without space with a specific path leading to the database agent that accepts the &quot;identifier&quot; for information retrieval. The &quot;database:identifier&quot; construct is called unique resource identifier (URI). The URI must be specific to a record. Both dbxref record and the resolved URL should be a continuous string compliant to [RFC-3986](https://datatracker.ietf.org/doc/rfc3986/). The composed URL must be unique and exist. Multiple dbxref items may be allowed for one GFF record. When the &quot;database&quot; abbreviation + path exists in a non-publicly available dbxref resource, it must be specified in a README file attached to the GFF file. We recommend using identifiers.org for identifier resolution.
   - **Pragma** : format: dbxref=URI; where URI is concatenated (without space) with the follow components: Protocol://domain name/ + [namespace] + identifier
     - Database short name is translated to an URL (protocol://domain name);
 
@@ -223,7 +223,7 @@ Attributes : Dbxref
 - Identifier: unique accession of an entity.
 
 - **Validation:** There may be a challenge when writing the validators, given that there are multiple independently maintained lists, and there may be lags in information updates. The validator could check whether a HTTP response status code 200 is returned based on the url built from the dbxref registry in the directive. Semicolons (&quot;;&quot;) are not permitted in the URL as it&#39;s used as the delimiter between column 9 &quot;name=value&quot; pairs..
-- **Example** : [https://docs.google.com/document/d/180g1rfC5n\_cR6sioG\_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.3ylh08mnzm75](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.3ylh08mnzm75)
+- **Example** : [Dbxref Attribute Example](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.3ylh08mnzm75)
 
 
 Attributes : Derives\_from
@@ -232,10 +232,10 @@ Attributes : Derives\_from
   - **Change level:** recommendation
   - **Summary:** The most common use for the Derives\_from attribute is to describe the relationship between CDS and polypeptide features. However, 1) not all software recognizes this relationship, and 2) we do not recommend modeling polypeptide features in GFF3 (see recommendations for &#39;Modeling hierarchical relationships of a protein-coding gene&#39;). Avoid modeling polypeptide features in general to prevent downstream interpretation problems of Derives\_from.
   - **Proposed changes to specification:** None.
-  - **Rationale:** The Derives\_from attribute ([http://purl.obolibrary.org/obo/RO\_0001000](http://purl.obolibrary.org/obo/RO_0001000)) is used in situations where the relationship between features is temporal, and therefore the part\_of relationship implied by the &#39;Parent&#39; attribute is not appropriate (e.g. polypeptides are derived from CDS features, or in the case of polycistronic genes). In practice most programs that consume or create GFF3 do not check whether implied part\_of relationships are actually valid per the Sequence Ontology (a notable exception is Genometools ([http://genometools.org/cgi-bin/gff3validator.cgi](http://genometools.org/cgi-bin/gff3validator.cgi))).
+  - **Rationale:** The Derives\_from attribute ([http://purl.obolibrary.org/obo/RO\_0001000](http://purl.obolibrary.org/obo/RO_0001000)) is used in situations where the relationship between features is temporal, and therefore the part\_of relationship implied by the &#39;Parent&#39; attribute is not appropriate (e.g. polypeptides are derived from CDS features, or in the case of polycistronic genes). In practice most programs that consume or create GFF3 do not check whether implied part\_of relationships are actually valid per the Sequence Ontology (a notable exception is [Genometools](http://genometools.org/cgi-bin/gff3validator.cgi).
   - **Best practices:** To avoid breaking software that consumes GFF3, we recommend not specifying a polypeptide feature if you&#39;re modeling a typical protein-coding gene based on genomic coordinates (see also recommendations for &#39;Modeling hierarchical relationships of a protein-coding gene&#39; below).
   - **Validation:** This needs more analysis and discussion.
-  - **Example:** [https://docs.google.com/document/d/180g1rfC5n\_cR6sioG\_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.l7o3yeprwedb](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.l7o3yeprwedb)
+  - **Example:** [Derives\_from Example](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.l7o3yeprwedb)
 
 
 Attributes : Note
@@ -307,7 +307,7 @@ Attributes complex metadata / functional annotations
   - Each \&lt;type annotation\&gt; has multiple key-value pairs, separated by a semi-colon (url-encoded as %2C).
   - \&lt;rank\&gt; is not necessary, but it is preferred if more than one annotation for a type exists.
   - \&lt;type\&gt;, \&lt;rank\&gt;, \&lt;key\&gt; should all be lower-case.
-- **Example:** [https://docs.google.com/document/d/180g1rfC5n\_cR6sioG\_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.h4b9kbtmxne6](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.h4b9kbtmxne6)
+- **Example:** [Complex Metadata Example](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.h4b9kbtmxne6)
 
 
 # Modeling hierarchical relationships of a protein-coding gene
@@ -327,24 +327,24 @@ Attributes complex metadata / functional annotations
     - Do not list multiple values in column 1 (for features split across scaffolds)
     - Polypeptide features are not required or recommended
     - Introns can be annotated, but are not necessary and are implied.
-    - Type should be specified and validated as part of the sequence ontology cv terms (see also notes on column 3, type, above): http://www.sequenceontology.org/miso
+    - Type should be specified and validated as part of the [sequence ontology](http://www.sequenceontology.org/miso) cv terms (see also notes on column 3, type, above): 
   - **Validation:**
 
 - Entries that are non-parent entries should have a valid parent entry via the ID.
 - IDs should be internally resolvable.
-- **Example:** [https://docs.google.com/document/d/180g1rfC5n\_cR6sioG\_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.k29nmx3hdkik](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.k29nmx3hdkik)
+- **Example:** [Relationship Modeling of Protein-Coding Genes](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.k29nmx3hdkik)
 
 
 Pragmas
 =======
 
   - **Seqid alias table**
-    - Used to cross reference multiple naming schemes for seqid values, for example, to correlate project chromosome names with NCBI accessions. Starts with ##alias-table [columns] and ends with ###. See [https://docs.google.com/document/d/180g1rfC5n\_cR6sioG\_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.tr1vioe7doqb](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.tr1vioe7doqb).
+    - Used to cross reference multiple naming schemes for seqid values, for example, to correlate project chromosome names with NCBI accessions. Starts with ##alias-table [columns] and ends with ###. [See](https://docs.google.com/document/d/180g1rfC5n_cR6sioG_LFGaUPNmQyDqTsPafVu4gM018/edit#bookmark=id.tr1vioe7doqb).
 
 - **Source.**
   - This pragma is optional.
   - The current SO recommendation is to specify the ontology of source names. However, no such ontology exists (yet).
-  - Instead, we suggest the following change. Follow the VCF specification for Info/ID: [https://samtools.github.io/hts-specs/VCFv4.3.pdf](https://samtools.github.io/hts-specs/VCFv4.3.pdf)
+  - Instead, we suggest the following change. Follow the [VCF specification](https://samtools.github.io/hts-specs/VCFv4.3.pdf) for Info/ID. 
   - Example: ##Source=\&lt;ID=BestRefSeq,Description=&quot;RefSeq transcript that underwent manual inspection&quot;, Software=&quot;URL here&quot;\&gt;
   - Primarily for human consumption - no validation at this point.
   - We discourage verbose use of this pragma. However, since it won&#39;t be validated, it is possible.
@@ -354,7 +354,7 @@ Pragmas
   - All parameters (_name_, _min_, _max_, and _best)_ are optional, but at least one should be set.
   - Example: ##Score name=&quot;AED (Annotation Edit Distance) score&quot;; min=0;max=1;best=lower
 - **Phase.**
-  - This pragma is optional. It is designed to handle reference sequences that do not use the standard genetic code (id = 1, see [https://www.ncbi.nlm.nih.gov/IEB/ToolBox/C\_DOC/lxr/source/data/gc.prt#0107](https://www.ncbi.nlm.nih.gov/IEB/ToolBox/C_DOC/lxr/source/data/gc.prt#0107))
+  - This pragma is optional. It is designed to handle reference sequences that do not use the standard genetic code (id = 1, [see](https://www.ncbi.nlm.nih.gov/IEB/ToolBox/C_DOC/lxr/source/data/gc.prt#0107))
   - Format: ##Phase \&lt;RefSeq ID\&gt; \&lt;translation table ID\&gt;;
   - Example (invertebrate mitochondrial sequence in genome assembly GCF\_013339725.1; all other sequences follow the standard genetic code): ##Phase \&lt;NC\_023335.1\&gt; \&lt;5\&gt;
 - **Dbxref**
@@ -379,7 +379,7 @@ Pragmas
   - Recommendations for modeling QTL data in gff.
   - Recommendations for modeling miRNAs.
   - How to handle gene models that are split across reference sequences.
-  - There are a number of unresolved issues on the gff3 spec that could be worth addressing: [https://github.com/The-Sequence-Ontology/Specifications/issues](https://github.com/The-Sequence-Ontology/Specifications/issues)
+  - There are a number of [unresolved issues](https://github.com/The-Sequence-Ontology/Specifications/issues) on the gff3 spec that could be worth addressing.
   - Discuss adding attributes to address genome context relevant to noted aberrations in genome structure in pan-genomes
   - While the GFF file can be used for the representation of genetic objects on a common coordinate system without regard to the actual coordinate system of the object, the GFF specification is designed to represent genetic objects in their native coordinate system. Therefore, any use of the GFF file for other purposes is not covered in the specification.
   - Identify a standard way of linking to resources that contain information related to what is contained in a GFF. The most obvious case would be for allowing explicit associations to fasta files; alignments externally might provide another case
@@ -563,9 +563,9 @@ In the case of pax6a ([http://zfin.org/ZDB-GENE-990415-200](http://zfin.org/ZDB-
 **Attributes (col 9): Dbxref**
 
 - SNP example:
-  - db\_xref=dbSNP:rs133073; (resolves to [https://www.ncbi.nlm.nih.gov/snp/rs133073?horizontal\_tab=true](https://www.ncbi.nlm.nih.gov/snp/rs133073?horizontal_tab=true) via [http://identifiers.org/dbSNP:rs133073](http://identifiers.org/dbSNP:rs133073))
+  - db\_xref=dbSNP:rs133073; (resolves to [https://www.ncbi.nlm.nih.gov/snp/rs133073?horizontal_tab=true](https://www.ncbi.nlm.nih.gov/snp/rs133073?horizontal_tab=true) via [http://identifiers.org/dbSNP:rs133073](http://identifiers.org/dbSNP:rs133073).
 - Protein-coding gene example:
-  - Dbxref=MaizeGDB.locus:12098 (resolves to [https://www.maizegdb.org/gene\_center/gene/12098](https://www.maizegdb.org/gene_center/gene/12098) via [https://identifiers.org/maizegdb.locus:12098](https://identifiers.org/maizegdb.locus:12098))
+  - Dbxref=MaizeGDB.locus:12098 (resolves to [https://www.maizegdb.org/gene_center/gene/12098](https://www.maizegdb.org/gene_center/gene/12098) via [https://identifiers.org/maizegdb.locus:12098](https://identifiers.org/maizegdb.locus:12098))
 
 ​​
 
